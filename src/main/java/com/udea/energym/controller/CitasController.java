@@ -47,4 +47,12 @@ public class CitasController {
 	public String eliminarProducto(@PathVariable Long idCita) {
 		return citaService.eliminarCita(idCita);
 	}
+	
+//	@GetMapping("/categotia/{idCategoria}")
+//	public List<CitaEntity> listarCitasDeUnaCategoria(@PathVariable Long idCategoria){
+//		CategoriaEntity categoriaEnt = new CategoriaEntity();
+//		categoriaEnt.setIdCategoria(idCategoria);
+//		return citaService.listarExamenesDeUnaCategoria(categoriaEnt);
+//	}
+	
 }

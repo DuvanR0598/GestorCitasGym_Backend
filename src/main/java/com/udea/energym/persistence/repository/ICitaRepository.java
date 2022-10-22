@@ -8,4 +8,5 @@ import com.udea.energym.persistence.entity.CitaEntity;
 @Repository
 public interface ICitaRepository extends JpaRepository<CitaEntity, Long>{
 
+//	List<CitaEntity> findByCategoria(CategoriaEntity categoriaEnt);
 }
