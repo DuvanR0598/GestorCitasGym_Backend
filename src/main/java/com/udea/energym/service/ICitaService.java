@@ -15,4 +15,6 @@ public interface ICitaService {
 	CitaEntity actualizarCita(CitaEntity citaEnt);
 	
 	String eliminarCita(Long idCita);
+	
+//	List<CitaEntity> listarExamenesDeUnaCategoria(CategoriaEntity categoriaEnt);
 }

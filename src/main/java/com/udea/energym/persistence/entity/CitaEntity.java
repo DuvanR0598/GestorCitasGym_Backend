@@ -11,6 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "citas")
 public class CitaEntity {
@@ -18,6 +23,12 @@ public class CitaEntity {
 	@Id
 	@Column(name = "id_cita")
 	private Long idCita;
+	
+	@Column(name = "titulo_cita")
+	private String tituloCita;
+	
+	@Column(name = "descripcion_cita")
+	private String descripcionC;
 	
 	@Column(name = "fecha")
 	private LocalDate fecha;
@@ -38,55 +49,5 @@ public class CitaEntity {
 	@JoinColumn(name = "cedula_usuarios")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private UsuarioEntity usuarioEnt;
-
-	public Long getIdCita() {
-		return idCita;
-	}
-
-	public void setIdCita(Long idCita) {
-		this.idCita = idCita;
-	}
-
-	public LocalDate getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
-	}
-
-	public Time getHora() {
-		return hora;
-	}
-
-	public void setHora(Time hora) {
-		this.hora = hora;
-	}
-
-	public String getDuracion() {
-		return duracion;
-	}
-
-	public void setDuracion(String duracion) {
-		this.duracion = duracion;
-	}
-
-	public CategoriaEntity getCategoriaEnt() {
-		return categoriaEnt;
-	}
-
-	public void setCategoriaEnt(CategoriaEntity categoriaEnt) {
-		this.categoriaEnt = categoriaEnt;
-	}
-
-	public UsuarioEntity getUsuarioEnt() {
-		return usuarioEnt;
-	}
-
-	public void setUsuarioEnt(UsuarioEntity usuarioEnt) {
-		this.usuarioEnt = usuarioEnt;
-	}
-	
-	
 	
 }

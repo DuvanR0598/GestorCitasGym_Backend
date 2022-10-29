@@ -44,7 +44,8 @@ public class CitasController {
 	}
 	
 	@DeleteMapping("/eliminar-cita/{idCita}")
-	public String eliminarProducto(@PathVariable Long idCita) {
+	public String eliminarCita(@PathVariable Long idCita) {
 		return citaService.eliminarCita(idCita);
 	}
+	
 }

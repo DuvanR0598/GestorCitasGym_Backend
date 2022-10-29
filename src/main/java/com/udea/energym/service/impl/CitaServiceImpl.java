@@ -35,13 +35,6 @@ public class CitaServiceImpl implements ICitaService{
 	@Override
 	public CitaEntity actualizarCita(CitaEntity citaEntity) {
 		return citaRepository.save(citaEntity);
-//		Optional<CitaEntity> citaEntOpt = citaRepository.findById(citaEntity.getIdCita());
-//		
-//		if(citaEntOpt.isPresent()) {
-//			citaRepository.save(citaEntity);
-//			return "Cita actualizada con exito";
-//		}
-//		return "La cita no existe en el sistema";
 	}
 
 	@Override
@@ -52,6 +45,13 @@ public class CitaServiceImpl implements ICitaService{
 		}
 		return "Error, la cita no existe";
 	}
+
+//	@Override
+//	public List<CitaEntity> listarExamenesDeUnaCategoria(CategoriaEntity categoriaEnt) {
+//		return this.citaRepository.findByCategoria(categoriaEnt);
+//	}
+
+
 	
 //	private CitaEntity dtoToEntity(Cita cita) {
 //		CitaEntity citaEnt = new CitaEntity();
