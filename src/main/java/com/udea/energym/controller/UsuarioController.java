@@ -76,9 +76,4 @@ public class UsuarioController {
     	exporter.exportarPDF(response);
     	
     }
-    
-//    @GetMapping("/lista-usuarios")
-//	public List<Usuario> listarUsuarios(){
-//		return usuarioService.listarUsuarios();
-//	}
 }
