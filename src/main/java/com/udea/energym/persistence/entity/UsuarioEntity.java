@@ -65,8 +65,8 @@ public class UsuarioEntity implements UserDetails {
     
     @OneToMany(mappedBy = "usuarioEnt", cascade = CascadeType.ALL)
     @JsonIgnore
-	private Set<CitaEntity> citas = new HashSet<>();
-
+	private Set<InscripcionesEntity> citas = new HashSet<>();
+    
     public Long getCedula() {
 		return cedula;
 	}

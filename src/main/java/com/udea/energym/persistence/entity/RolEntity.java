@@ -18,6 +18,8 @@ public class RolEntity {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "rol")
     private Set<UsuarioRolEntity> usuarioRoles = new HashSet<>();
 
+    
+    
 	public Long getDniRol() {
 		return dniRol;
 	}
