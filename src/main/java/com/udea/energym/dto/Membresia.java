@@ -10,6 +10,7 @@ import lombok.Setter;
 public class Membresia {
 	
 	private Long idMembresia;
+	private String titulo;
 	private LocalDate fechaInicio;
 	private LocalDate fechaVencimiento;
 	private String estado; //activo, vencido, cancelado

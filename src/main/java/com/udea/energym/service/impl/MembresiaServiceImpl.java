@@ -23,6 +23,8 @@ public class MembresiaServiceImpl implements IMembresiaService {
 	
 	private MembresiaEntity dtoToEntity (Membresia membresia) {
 		MembresiaEntity membresiaEnt = new MembresiaEntity();
+		
+		membresiaEnt.setTitulo(membresia.getTitulo());
 		membresiaEnt.setFechaInicio(membresia.getFechaInicio());
 		membresiaEnt.setFechaVencimiento(membresia.getFechaVencimiento());
 		membresiaEnt.setEstado(membresia.getEstado());	

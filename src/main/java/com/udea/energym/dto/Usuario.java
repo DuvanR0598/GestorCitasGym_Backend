@@ -1,6 +1,7 @@
 package com.udea.energym.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +21,6 @@ public class Usuario {
 	private float altura;
 	private String username;
 	private String password;
+	private List<Rol> listaRoles;
+	private List<Membresia> listaMembresias;
 }

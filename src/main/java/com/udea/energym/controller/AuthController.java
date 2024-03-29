@@ -2,8 +2,10 @@ package com.udea.energym.controller;
 
 import com.udea.energym.dto.Login;
 import com.udea.energym.dto.Usuario;
+import com.udea.energym.persistence.entity.MembresiaEntity;
 import com.udea.energym.persistence.entity.RolEntity;
 import com.udea.energym.persistence.entity.UsuarioEntity;
+import com.udea.energym.persistence.entity.UsuarioMembresiaEntity;
 import com.udea.energym.persistence.entity.UsuarioRolEntity;
 import com.udea.energym.persistence.repository.IUsuarioRepository;
 import com.udea.energym.security.CustomUserDetailsService;
@@ -78,19 +80,32 @@ public class AuthController {
 			return new ResponseEntity<>("El nombre de usuario ya existe", HttpStatus.BAD_REQUEST);
 		}else {
 			Set<UsuarioRolEntity> usuarioRoles = new HashSet<>();
+			Set<UsuarioMembresiaEntity> usuarioMembresias = new HashSet<>();
 
 	        RolEntity rol = new RolEntity();
-	        rol.setDniRol(1L);
-	        rol.setNombre("ROLE_ADMIN");
+	        rol.setDniRol(usuario.getListaRoles().get(0).getDniRol());
+	        rol.setNombre(usuario.getListaRoles().get(0).getNombre());
+	        
+	        MembresiaEntity membresiaEnt = new MembresiaEntity();
+	        membresiaEnt.setIdMembresia(usuario.getListaMembresias().get(0).getIdMembresia());
+	        membresiaEnt.setTitulo(usuario.getListaMembresias().get(0).getTitulo());
+	        membresiaEnt.setFechaInicio(usuario.getListaMembresias().get(0).getFechaInicio());
+	        membresiaEnt.setFechaVencimiento(usuario.getListaMembresias().get(0).getFechaVencimiento());
+	        membresiaEnt.setEstado(usuario.getListaMembresias().get(0).getEstado());
 
 	        UsuarioEntity usuarioEnt = guardarUsuario(usuario);
 	        
 	        UsuarioRolEntity usuarioRolEnt = new UsuarioRolEntity();
 	        usuarioRolEnt.setUsuario(usuarioEnt);
 	        usuarioRolEnt.setRol(rol);
+	        
+	        UsuarioMembresiaEntity usuarioMembEnt = new UsuarioMembresiaEntity();
+	        usuarioMembEnt.setUsuario(usuarioEnt);
+	        usuarioMembEnt.setMembresia(membresiaEnt);
 
 	        usuarioRoles.add(usuarioRolEnt);
-	        usuarioService.guardarUsuario(usuarioEnt, usuarioRoles);
+	        usuarioMembresias.add(usuarioMembEnt);
+	        usuarioService.guardarUsuario(usuarioEnt, usuarioRoles, usuarioMembresias);
 	        return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.OK);
 		}
     }

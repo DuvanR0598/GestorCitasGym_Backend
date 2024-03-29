@@ -8,11 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 import com.udea.energym.dto.Usuario;
 import com.udea.energym.persistence.entity.UsuarioEntity;
+import com.udea.energym.persistence.entity.UsuarioMembresiaEntity;
 import com.udea.energym.persistence.entity.UsuarioRolEntity;
 
 public interface IUsuarioService {
 
-    UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles);
+    UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles, Set<UsuarioMembresiaEntity> usuarioMembresias);
     
     Usuario buscarUsuarioId(Long id);
 

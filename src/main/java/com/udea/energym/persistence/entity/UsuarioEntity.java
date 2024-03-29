@@ -63,9 +63,13 @@ public class UsuarioEntity implements UserDetails {
     @JsonIgnore
     private Set<UsuarioRolEntity> roles = new HashSet<>();
     
-    @OneToMany(mappedBy = "usuarioEnt", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
     @JsonIgnore
-	private Set<InscripcionesEntity> citas = new HashSet<>();
+    private Set<UsuarioMembresiaEntity> membresias = new HashSet<>();
+    
+//    @OneToMany(mappedBy = "usuarioEnt", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//	private Set<InscripcionesEntity> citas = new HashSet<>();
     
     public Long getCedula() {
 		return cedula;
@@ -194,4 +198,14 @@ public class UsuarioEntity implements UserDetails {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public Set<UsuarioMembresiaEntity> getMembresias() {
+		return membresias;
+	}
+
+	public void setMembresias(Set<UsuarioMembresiaEntity> membresias) {
+		this.membresias = membresias;
+	}
+	
+	
 }

@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.udea.energym.dto.Usuario;
 import com.udea.energym.persistence.entity.UsuarioEntity;
+import com.udea.energym.persistence.entity.UsuarioMembresiaEntity;
 import com.udea.energym.persistence.entity.UsuarioRolEntity;
+import com.udea.energym.persistence.repository.IMembresiaRepository;
 import com.udea.energym.persistence.repository.IRolRepository;
 import com.udea.energym.persistence.repository.IUsuarioRepository;
 import com.udea.energym.service.IUsuarioService;
@@ -28,14 +30,23 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Autowired
     private IRolRepository rolRepository;
+    
+    @Autowired
+    private IMembresiaRepository membresiaRepository;
 
     @Override
-    public UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles) {
+    public UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles, Set<UsuarioMembresiaEntity> usuarioMembresias) {
        
         for(UsuarioRolEntity usuarioRol:usuarioRoles){
             rolRepository.save(usuarioRol.getRol());
+            
         }
         usuario.getRoles().addAll(usuarioRoles);
+        
+        for(UsuarioMembresiaEntity usuarioMembresia:usuarioMembresias) {
+        	membresiaRepository.save(usuarioMembresia.getMembresia());
+        }
+        usuario.getMembresias().addAll(usuarioMembresias);
         
         return usuarioRepository.save(usuario);
     }
