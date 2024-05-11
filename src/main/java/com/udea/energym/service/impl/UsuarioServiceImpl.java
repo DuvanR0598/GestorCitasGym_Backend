@@ -35,7 +35,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private IMembresiaRepository membresiaRepository;
 
     @Override
-    public UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles, Set<UsuarioMembresiaEntity> usuarioMembresias) {
+    public UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles, 
+    		Set<UsuarioMembresiaEntity> usuarioMembresias) {
        
         for(UsuarioRolEntity usuarioRol:usuarioRoles){
             rolRepository.save(usuarioRol.getRol());

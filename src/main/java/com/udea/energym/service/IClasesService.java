@@ -3,11 +3,10 @@ package com.udea.energym.service;
 import java.util.Set;
 
 import com.udea.energym.dto.Clases;
-import com.udea.energym.persistence.entity.ClasesEntity;
 
 public interface IClasesService {
 
-	Set<ClasesEntity> obtenerClases();
+	Set<Clases> obtenerClases();
 	
 	Clases guardarClase(Clases clases);
 	

@@ -29,8 +29,8 @@ public class ClasesController {
 	}
 	
 	@GetMapping("/buscar-clase/{idClase}")
-	public ResponseEntity<Clases> buscarClaseId(@PathVariable Long idCategoria) {
-		return ResponseEntity.ok().body(clasesService.obtenerClaseId(idCategoria));
+	public ResponseEntity<Clases> buscarClaseId(@PathVariable Long idClase) {
+		return ResponseEntity.ok().body(clasesService.obtenerClaseId(idClase));
 	}
 	
 	@GetMapping("/lista-clases")
@@ -44,7 +44,7 @@ public class ClasesController {
 	} 
 	
 	@DeleteMapping("/eliminar-clase/{idClase}")
-	public String eliminarClase(@PathVariable Long idCategoria) {
-		return clasesService.eliminarClase(idCategoria);
+	public String eliminarClase(@PathVariable Long idClase) {
+		return clasesService.eliminarClase(idClase);
 	}
 }

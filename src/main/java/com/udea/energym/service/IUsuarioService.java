@@ -13,7 +13,8 @@ import com.udea.energym.persistence.entity.UsuarioRolEntity;
 
 public interface IUsuarioService {
 
-    UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles, Set<UsuarioMembresiaEntity> usuarioMembresias);
+    UsuarioEntity guardarUsuario(UsuarioEntity usuario, Set<UsuarioRolEntity> usuarioRoles, 
+    		Set<UsuarioMembresiaEntity> usuarioMembresias);
     
     Usuario buscarUsuarioId(Long id);
 

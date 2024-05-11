@@ -8,15 +8,23 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 @Table(name = "clases")
 public class ClasesEntity {
 	
@@ -55,86 +63,15 @@ public class ClasesEntity {
 	private int capacidadMax;
 	
 	/**
-	 * @OneToMany = Una categoria puede tener muchas citas. 
-	 * CascadeType.ALL = Cuando eliminemos una gategoria, podremos eliminar tambien las citas asociadas
+	 * @OneToMany = Una categoria puede tener muchas clases. 
+	 * CascadeType.ALL = Cuando eliminemos una gategoria, podremos eliminar tambien las clases asociadas
 	 * a esa categoria.
 	 */
 	@OneToMany(mappedBy = "clasesEnt", cascade = CascadeType.ALL)
 	@JsonIgnore
-	private Set<InscripcionesEntity> inscripciones = new LinkedHashSet<>();
-
-	public Long getIdClases() {
-		return idClases;
-	}
-
-	public void setIdClases(Long idClases) {
-		this.idClases = idClases;
-	}
-
-	public String getNombreClase() {
-		return nombreClase;
-	}
-
-	public void setNombreClase(String nombreClase) {
-		this.nombreClase = nombreClase;
-	}
-
-	public String getTipoClase() {
-		return tipoClase;
-	}
-
-	public void setTipoClase(String tipoClase) {
-		this.tipoClase = tipoClase;
-	}
-
-	public String getInstructor() {
-		return instructor;
-	}
-
-	public void setInstructor(String instructor) {
-		this.instructor = instructor;
-	}
-
-	public String getUbicacion() {
-		return ubicacion;
-	}
-
-	public void setUbicacion(String ubicacion) {
-		this.ubicacion = ubicacion;
-	}
-
-	public Time getHora() {
-		return hora;
-	}
-
-	public void setHora(Time hora) {
-		this.hora = hora;
-	}
-
-	public int getCapacidadMax() {
-		return capacidadMax;
-	}
-
-	public void setCapacidadMax(int capacidadMax) {
-		this.capacidadMax = capacidadMax;
-	}
-
-	public Set<InscripcionesEntity> getInscripciones() {
-		return inscripciones;
-	}
-
-	public void setInscripciones(Set<InscripcionesEntity> inscripciones) {
-		this.inscripciones = inscripciones;
-	}
-
-	public Set<InscripcionesEntity> getCitas() {
-		return inscripciones;
-	}
-
-	public void setCitas(Set<InscripcionesEntity> citas) {
-		this.inscripciones = citas;
-	}
+	private Set<UsuarioClasesEntity> usuarioClases = new LinkedHashSet<>();
 	
-	
-	
+	@ManyToOne (fetch = FetchType.EAGER)
+	@JoinColumn(name = "categoria_id")
+	private CategoriaEntity categoria;
 }

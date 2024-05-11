@@ -15,6 +15,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private IUsuarioRepository usuarioRepository;
 
+    //Esta clase lo hace es cargar un usuario y/o buscar un usuario por el username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UsuarioEntity usuarioEnt = usuarioRepository.findByUsername(username)

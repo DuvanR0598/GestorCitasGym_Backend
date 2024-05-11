@@ -67,11 +67,21 @@ public class UsuarioEntity implements UserDetails {
     @JsonIgnore
     private Set<UsuarioMembresiaEntity> membresias = new HashSet<>();
     
-//    @OneToMany(mappedBy = "usuarioEnt", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//	private Set<InscripcionesEntity> citas = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuarioEnt")
+    @JsonIgnore
+    private Set<UsuarioClasesEntity> clases = new HashSet<>();
+
+    //------------------------------------------------------------------------------------------
     
-    public Long getCedula() {
+    public Set<UsuarioClasesEntity> getClases() {
+		return clases;
+	}
+
+	public void setClases(Set<UsuarioClasesEntity> clases) {
+		this.clases = clases;
+	}
+
+	public Long getCedula() {
 		return cedula;
 	}
 
@@ -102,6 +112,7 @@ public class UsuarioEntity implements UserDetails {
         this.username = username;
     }
 
+    //Obtenemos los roles, recorremos la tabla de los roles y retornamos el nombre
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Authority> autoridades = new HashSet<>();

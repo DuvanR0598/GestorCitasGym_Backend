@@ -10,7 +10,7 @@ import com.udea.energym.persistence.entity.UsuarioRolEntity;
 import com.udea.energym.persistence.repository.IUsuarioRepository;
 import com.udea.energym.security.CustomUserDetailsService;
 import com.udea.energym.security.JWTAuthResonseDTO;
-import com.udea.energym.security.JwtTokenProvider;
+import com.udea.energym.security.JwtUtils;
 import com.udea.energym.service.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class AuthController {
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtUtils jwtUtils;
     
     @Autowired
 	private PasswordEncoder passwordEncoder;
@@ -60,7 +60,7 @@ public class AuthController {
         }
 
         UserDetails userDetails =  userDetailsService.loadUserByUsername(login.getUsername());
-        String token = jwtTokenProvider.generateToken(userDetails);
+        String token = jwtUtils.generateToken(userDetails);
         return ResponseEntity.ok(new JWTAuthResonseDTO(token));
     }
 
@@ -102,6 +102,7 @@ public class AuthController {
 	        UsuarioMembresiaEntity usuarioMembEnt = new UsuarioMembresiaEntity();
 	        usuarioMembEnt.setUsuario(usuarioEnt);
 	        usuarioMembEnt.setMembresia(membresiaEnt);
+	        
 
 	        usuarioRoles.add(usuarioRolEnt);
 	        usuarioMembresias.add(usuarioMembEnt);

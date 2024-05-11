@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 
 @Component
-public class JwtTokenProvider {
+public class JwtUtils {
 
     private String SECRET_KEY = "examportal";
 

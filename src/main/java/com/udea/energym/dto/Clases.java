@@ -18,4 +18,5 @@ public class Clases {
 	private LocalDate fechaClase;
 	private Time hora;
 	private int capacidadMax;
+	private Categoria categoria;
 }

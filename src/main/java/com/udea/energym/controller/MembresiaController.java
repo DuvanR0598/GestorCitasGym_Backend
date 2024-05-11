@@ -24,5 +24,4 @@ public class MembresiaController {
 	public ResponseEntity<Membresia> guardarMembresia(@RequestBody Membresia membresia){
 		return ResponseEntity.ok().body(membresiaService.guardarMembresia(membresia));
 	}
-
 }

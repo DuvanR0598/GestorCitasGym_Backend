@@ -4,12 +4,22 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.udea.energym.dto.Categoria;
 import com.udea.energym.dto.Clases;
+import com.udea.energym.persistence.entity.CategoriaEntity;
 import com.udea.energym.persistence.entity.ClasesEntity;
+import com.udea.energym.persistence.entity.UsuarioClasesEntity;
+import com.udea.energym.persistence.entity.UsuarioEntity;
+import com.udea.energym.persistence.repository.ICategoriaRepository;
 import com.udea.energym.persistence.repository.IClasesRepository;
+import com.udea.energym.persistence.repository.IUsuarioRepository;
 import com.udea.energym.service.IClasesService;
 
 @Service
@@ -17,17 +27,48 @@ public class ClasesServiceImpl implements IClasesService {
 	
 	@Autowired
 	private IClasesRepository clasesRepository;
+	
+	@Autowired 
+	private ICategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private IUsuarioRepository usuarioRepository;
 
 	@Override
-	public Set<ClasesEntity> obtenerClases() {
-		return new LinkedHashSet<>(clasesRepository.findAll());
+	public Set<Clases> obtenerClases() {
+		Set<ClasesEntity> clasesEntities = new LinkedHashSet<>(clasesRepository.findAll());
+	    Set<Clases> clasesDTOs = new LinkedHashSet<>();
+	    for (ClasesEntity clasesEntity : clasesEntities) {
+	        Clases clasesDTO = entityToDto(clasesEntity);
+	        clasesDTOs.add(clasesDTO);
+	    }
+	    return clasesDTOs;
 	}
 
 	@Override
 	public Clases guardarClase(Clases clases) {
-		ClasesEntity claseEnt = clasesRepository.save(dtoToEntity(clases));
-		clases.setIdClases(claseEnt.getIdClases());
-		return clases;
+		// Obtener el nombre de usuario del usuario actual
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        
+        // Buscar el usuario por el nombre de usuario
+        UsuarioEntity usuarioEnt = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con el nombre de usuario: " + username));
+
+        // Convertir el DTO a una entidad Clases
+        ClasesEntity claseEnt = dtoToEntity(clases);
+        
+        // Asociar al usuario con la clase
+        UsuarioClasesEntity usuarioClaseEnt = new UsuarioClasesEntity();
+        usuarioClaseEnt.setUsuarioEnt(usuarioEnt);
+        usuarioClaseEnt.setClasesEnt(claseEnt);
+        claseEnt.getUsuarioClases().add(usuarioClaseEnt);
+        
+        // Guardar la clase
+        claseEnt = clasesRepository.save(claseEnt);
+        
+        // Devolver la clase convertida a DTO
+		return entityToDto(claseEnt);
 	}
 
 	@Override
@@ -56,18 +97,18 @@ public class ClasesServiceImpl implements IClasesService {
 			clasesEnt.setHora(clases.getHora());
 			clasesEnt.setCapacidadMax(clases.getCapacidadMax());
 			clasesRepository.save(clasesEnt);
-			return "Categoria actualizada...";
+			return "Clase actualizada...";
 		}
-		return "La categoria no existe...";
+		return "La clase no existe...";
 	}
 
 	@Override
 	public String eliminarClase(Long idClase) {
 		if(clasesRepository.findById(idClase).isPresent()) {
 			clasesRepository.deleteById(idClase);
-			return "Eliminado correctamente!";
+			return "¡Clase eliminada correctamente!";
 		}
-		return "Error! la categoria no existe";
+		return "Error! la clase no existe";
 	}
 	
 	private ClasesEntity dtoToEntity(Clases clases) {
@@ -79,6 +120,13 @@ public class ClasesServiceImpl implements IClasesService {
 		clasesEnt.setFechaClase(clases.getFechaClase());
 		clasesEnt.setHora(clases.getHora());
 		clasesEnt.setCapacidadMax(clases.getCapacidadMax());
+		
+		// Obtener la categoría del DTO y convertirla en una entidad de categoría
+		CategoriaEntity categoriaEnt = categoriaRepository.findById(clases.getCategoria().getIdCategoria())
+				.orElseThrow(() -> new EntityNotFoundException("Categoria no encontrada"));
+		
+		clasesEnt.setCategoria(categoriaEnt);
+		
 		return clasesEnt;
 	}
 	
@@ -92,6 +140,14 @@ public class ClasesServiceImpl implements IClasesService {
 		clases.setFechaClase(clasesEnt.getFechaClase());
 		clases.setHora(clasesEnt.getHora());
 		clases.setCapacidadMax(clasesEnt.getCapacidadMax());
+		
+		// Obtener la categoría asociada a la clase y mapearla al DTO
+	    Categoria categoria = new Categoria();
+	    categoria.setIdCategoria(clasesEnt.getCategoria().getIdCategoria());
+	    categoria.setTitulo(clasesEnt.getCategoria().getTitulo());
+	    categoria.setDescripcion(clasesEnt.getCategoria().getDescripcion());
+	    // Asignar la categoría al DTO de la clase
+	    clases.setCategoria(categoria);
 		return clases;
 	}
 }
