@@ -18,5 +18,6 @@ public class Clases {
 	private LocalDate fechaClase;
 	private Time hora;
 	private int capacidadMax;
+	private boolean activo = false; //Para habilitar o deshabilitar una clase desde el ROLE_ADMIN
 	private Categoria categoria;
 }

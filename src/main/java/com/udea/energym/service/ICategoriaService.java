@@ -3,11 +3,10 @@ package com.udea.energym.service;
 import java.util.Set;
 
 import com.udea.energym.dto.Categoria;
-import com.udea.energym.persistence.entity.CategoriaEntity;
 
 public interface ICategoriaService {
 	
-	Set<CategoriaEntity> obtenerCategorias();
+	Set<Categoria> obtenerCategorias();
 	
 	Categoria guardarCategoria(Categoria categoria);
 	

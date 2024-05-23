@@ -47,20 +47,15 @@ public class ClasesEntity {
 	
 	@Column(name = "fecha_clase") 
 	private LocalDate fechaClase;
-	
-	public LocalDate getFechaClase() {
-		return fechaClase;
-	}
-
-	public void setFechaClase(LocalDate fechaClase) {
-		this.fechaClase = fechaClase;
-	}
 
 	@Column(name = "hora")
 	private Time hora;
 	
 	@Column(name = "capacidad_max")
 	private int capacidadMax;
+	
+	@Column(name = "activo")
+	private boolean activo = false;
 	
 	/**
 	 * @OneToMany = Una categoria puede tener muchas clases. 

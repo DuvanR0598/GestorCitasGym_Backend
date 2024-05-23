@@ -19,8 +19,15 @@ public class CategoriaServiceImpl implements ICategoriaService {
 	private ICategoriaRepository categoriaRepository;
 
 	@Override
-	public Set<CategoriaEntity> obtenerCategorias() {
-		return new LinkedHashSet<>(categoriaRepository.findAll());
+	public Set<Categoria> obtenerCategorias() {
+		//return new LinkedHashSet<>(categoriaRepository.findAll());
+		Set<CategoriaEntity> CategoriaEntity = new LinkedHashSet<>(categoriaRepository.findAll());
+		Set<Categoria> categoriaDTO = new LinkedHashSet<>();
+		for (CategoriaEntity categoriaEntity : CategoriaEntity) {
+			Categoria categoria = entityToDto(categoriaEntity);
+			categoriaDTO.add(categoria);
+		}
+		return categoriaDTO;
 	}
 
 	@Override
@@ -74,6 +81,7 @@ public class CategoriaServiceImpl implements ICategoriaService {
 	
 	private Categoria entityToDto(CategoriaEntity categoriaEnt) {
 		Categoria categoria = new Categoria();
+		categoria.setIdCategoria(categoriaEnt.getIdCategoria());
 		categoria.setTitulo(categoriaEnt.getTitulo());
 		categoria.setDescripcion(categoriaEnt.getDescripcion());
 		return categoria;

@@ -1,8 +1,10 @@
 package com.udea.energym.service.impl;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -96,6 +98,7 @@ public class ClasesServiceImpl implements IClasesService {
 			clasesEnt.setFechaClase(clases.getFechaClase());
 			clasesEnt.setHora(clases.getHora());
 			clasesEnt.setCapacidadMax(clases.getCapacidadMax());
+			clasesEnt.setActivo(clases.isActivo());
 			clasesRepository.save(clasesEnt);
 			return "Clase actualizada...";
 		}
@@ -111,6 +114,30 @@ public class ClasesServiceImpl implements IClasesService {
 		return "Error! la clase no existe";
 	}
 	
+	@Override
+	public List<Clases> listarClasesDeUnaCategoria(Long idCategoria) {
+		CategoriaEntity categoriaEntity = categoriaRepository.findById(idCategoria)
+                .orElseThrow(() -> new EntityNotFoundException("Categoria no encontrada"));
+		
+		List<ClasesEntity> clasesEntities = clasesRepository.findByCategoria(categoriaEntity);
+		return clasesEntities.stream().map(this::entityToDto).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Clases> obtenerClasesActivas() {
+		List<ClasesEntity> clasesEntities = clasesRepository.findByActivo(true);
+		return clasesEntities.stream().map(this::entityToDto).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Clases> listarClasesActivasDeUnaCategoria(Categoria categoria) {
+		CategoriaEntity categoriaEntity = new CategoriaEntity();
+		categoriaEntity.setIdCategoria(categoria.getIdCategoria());
+		
+		List<ClasesEntity> clasesEntities = clasesRepository.findByCategoriaAndActivo(categoriaEntity, true);
+		return clasesEntities.stream().map(this::entityToDto).collect(Collectors.toList());
+	}
+	
 	private ClasesEntity dtoToEntity(Clases clases) {
 		ClasesEntity clasesEnt = new ClasesEntity();
 		clasesEnt.setNombreClase(clases.getNombreClase());
@@ -120,6 +147,7 @@ public class ClasesServiceImpl implements IClasesService {
 		clasesEnt.setFechaClase(clases.getFechaClase());
 		clasesEnt.setHora(clases.getHora());
 		clasesEnt.setCapacidadMax(clases.getCapacidadMax());
+		clasesEnt.setActivo(clases.isActivo());
 		
 		// Obtener la categoría del DTO y convertirla en una entidad de categoría
 		CategoriaEntity categoriaEnt = categoriaRepository.findById(clases.getCategoria().getIdCategoria())
@@ -140,6 +168,7 @@ public class ClasesServiceImpl implements IClasesService {
 		clases.setFechaClase(clasesEnt.getFechaClase());
 		clases.setHora(clasesEnt.getHora());
 		clases.setCapacidadMax(clasesEnt.getCapacidadMax());
+		clases.setActivo(clasesEnt.isActivo());
 		
 		// Obtener la categoría asociada a la clase y mapearla al DTO
 	    Categoria categoria = new Categoria();
