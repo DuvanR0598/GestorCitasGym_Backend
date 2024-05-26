@@ -11,6 +11,7 @@ import com.udea.energym.persistence.repository.IUsuarioRepository;
 import com.udea.energym.security.CustomUserDetailsService;
 import com.udea.energym.security.JWTAuthResonseDTO;
 import com.udea.energym.security.JwtUtils;
+import com.udea.energym.service.IEmailService;
 import com.udea.energym.service.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class AuthController {
     
     @Autowired
 	private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private IEmailService emailService;
 
     @PostMapping("/iniciar-sesion")
     public ResponseEntity<?> generarToken(@RequestBody Login login) throws Exception {
@@ -107,6 +111,9 @@ public class AuthController {
 	        usuarioRoles.add(usuarioRolEnt);
 	        usuarioMembresias.add(usuarioMembEnt);
 	        usuarioService.guardarUsuario(usuarioEnt, usuarioRoles, usuarioMembresias);
+	        
+	        emailService.sendWelcomeEmail(usuario.getEmail(), "Bienvenido a Energym " + usuario.getNombre(), "Gracias por registrarte en nuestro gimnasio!");
+	        
 	        return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.OK);
 		}
     }
