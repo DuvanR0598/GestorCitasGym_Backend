@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.udea.energym.dto.Categoria;
 import com.udea.energym.dto.Clases;
+import com.udea.energym.dto.Usuario;
+import com.udea.energym.dto.UsuarioClases;
 import com.udea.energym.service.IClasesService;
 
 @RestController
@@ -66,5 +68,19 @@ public class ClasesController {
         Categoria categoria = new Categoria();
         categoria.setIdCategoria(idCategoria);
         return clasesService.listarClasesActivasDeUnaCategoria(categoria);
+    }
+	
+	//---------------------------------------------------------------------------------
+	
+	@PostMapping("/inscribir")
+    public ResponseEntity<String> inscribirUsuarioClase(@RequestBody UsuarioClases usuarioClases) {
+        clasesService.inscribirUsuarioClase(usuarioClases.getIdClase(), usuarioClases.getCedulaUsuario());
+        return ResponseEntity.ok("Usuario inscrito correctamente");
+    }
+
+    @GetMapping("/inscritos/{idClase}")
+    public ResponseEntity<List<Usuario>> obtenerUsuariosInscritos(@PathVariable Long idClase) {
+        List<Usuario> usuarios = clasesService.obtenerUsuariosInscritos(idClase);
+        return ResponseEntity.ok(usuarios);
     }
 }

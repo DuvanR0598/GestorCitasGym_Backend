@@ -20,5 +20,7 @@ public interface IUsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     @Query(value = "SELECT * FROM energym.usuarios", 
     		nativeQuery = true)
 	Page<UsuarioEntity> buscarUsuarioPaginado(Pageable pageable);
+    
+    Optional<UsuarioEntity> findByCedula(Long cedula);
 
 }

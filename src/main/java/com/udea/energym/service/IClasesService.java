@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.udea.energym.dto.Categoria;
 import com.udea.energym.dto.Clases;
+import com.udea.energym.dto.Usuario;
 
 public interface IClasesService {
 
@@ -23,4 +24,8 @@ public interface IClasesService {
 	List<Clases> obtenerClasesActivas();
 	
 	List<Clases> listarClasesActivasDeUnaCategoria(Categoria categoria);
+	
+	void inscribirUsuarioClase(Long idClase, Long cedulaUsuario);
+
+    List<Usuario> obtenerUsuariosInscritos(Long idClase);
 }

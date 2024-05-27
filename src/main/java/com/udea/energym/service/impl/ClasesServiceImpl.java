@@ -15,12 +15,14 @@ import org.springframework.stereotype.Service;
 
 import com.udea.energym.dto.Categoria;
 import com.udea.energym.dto.Clases;
+import com.udea.energym.dto.Usuario;
 import com.udea.energym.persistence.entity.CategoriaEntity;
 import com.udea.energym.persistence.entity.ClasesEntity;
 import com.udea.energym.persistence.entity.UsuarioClasesEntity;
 import com.udea.energym.persistence.entity.UsuarioEntity;
 import com.udea.energym.persistence.repository.ICategoriaRepository;
 import com.udea.energym.persistence.repository.IClasesRepository;
+import com.udea.energym.persistence.repository.IUsuarioClaseRepository;
 import com.udea.energym.persistence.repository.IUsuarioRepository;
 import com.udea.energym.service.IClasesService;
 
@@ -35,6 +37,9 @@ public class ClasesServiceImpl implements IClasesService {
 	
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
+	
+	@Autowired
+    private IUsuarioClaseRepository usuarioClaseRepository;
 
 	@Override
 	public Set<Clases> obtenerClases() {
@@ -179,4 +184,57 @@ public class ClasesServiceImpl implements IClasesService {
 	    clases.setCategoria(categoria);
 		return clases;
 	}
+
+	
+	
+	@Override
+	public void inscribirUsuarioClase(Long idClase, Long cedulaUsuario) {
+		// Obtener el nombre de usuario del usuario actual
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        
+        // Buscar el usuario por el nombre de usuario
+        UsuarioEntity usuarioEnt = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con el nombre de usuario: " + username));
+		
+        // Validar que la cédula del usuario autenticado sea la misma que la cédula proporcionada
+        if (!usuarioEnt.getCedula().equals(cedulaUsuario)) {
+            throw new SecurityException("El usuario no corresponde con el logueado en el sistema");
+        }
+        
+        // Buscar la clase por id
+		ClasesEntity clase = clasesRepository.findById(idClase)
+                .orElseThrow(() -> new EntityNotFoundException("Clase no encontrada"));
+
+
+        UsuarioClasesEntity usuarioClase = new UsuarioClasesEntity();
+        usuarioClase.setClasesEnt(clase);
+        usuarioClase.setUsuarioEnt(usuarioEnt);
+        
+        usuarioClaseRepository.save(usuarioClase);
+		
+	}
+
+	@Override
+	public List<Usuario> obtenerUsuariosInscritos(Long idClase) {
+		ClasesEntity clase = clasesRepository.findById(idClase)
+                .orElseThrow(() -> new EntityNotFoundException("Clase no encontrada"));
+        
+        List<UsuarioClasesEntity> usuarioClasesEntities = usuarioClaseRepository.findByClasesEnt(clase);
+        
+        return usuarioClasesEntities.stream()
+                .map(UsuarioClasesEntity::getUsuarioEnt)
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+	}
+	
+	private Usuario entityToDto(UsuarioEntity usuarioEnt) {
+        Usuario usuario = new Usuario();
+        usuario.setCedula(usuarioEnt.getCedula());
+        usuario.setNombre(usuarioEnt.getNombre());
+        usuario.setApellido(usuarioEnt.getApellido());
+        usuario.setEmail(usuarioEnt.getEmail());
+        // Mapear otros campos según sea necesario
+        return usuario;
+    }
 }
