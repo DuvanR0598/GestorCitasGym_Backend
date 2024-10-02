@@ -15,6 +15,8 @@ public interface IUsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
 	Boolean existsByUsername(String username);
 	
+	Boolean existsByEmail(String email);
+	
     Optional<UsuarioEntity> findByUsername(String username);
     
     @Query(value = "SELECT * FROM energym.usuarios", 

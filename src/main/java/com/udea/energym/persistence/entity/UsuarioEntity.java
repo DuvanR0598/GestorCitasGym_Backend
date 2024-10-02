@@ -12,12 +12,16 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udea.energym.security.configuration.Authority;
+import com.udea.energym.util.validaciones.ValidEmail;
 
 @Entity
 @Table(name = "usuarios")
@@ -29,22 +33,27 @@ public class UsuarioEntity implements UserDetails {
 	@Column(name = "cedula")
 	private Long cedula;
 	
+	@Size(min = 1, max = 15)
 	@Column(name = "nombre")
 	private String nombre;
 	
+	@Size(min = 1, max = 15)
 	@Column(name = "apellido")
 	private String apellido;
 	
 	@Column(name = "genero")
 	private char genero;
 	
+	@Past(message = "La fecha de nacimiento debe ser en el pasado")
 	@Column(name = "fecha_nacimiento")
 	private LocalDate fechaNacimiento;
 	
 	@Column(name = "celular")
 	private String celular;
 	
-	@Column(name = "email")
+	@ValidEmail(allowedDomains = {"com", "net", "edu"})
+	@NotBlank(message = "El correo electrónico no puede estar vacío")
+	@Column(name = "email", unique = true)
 	private String email;
 	
 	@Column(name = "peso")
@@ -53,6 +62,7 @@ public class UsuarioEntity implements UserDetails {
 	@Column(name = "altura")
 	private float altura;
 	
+	@Size(min = 4, max = 10)
 	@Column(name = "username")
 	private String username;
 	

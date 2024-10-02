@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Future;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,6 +46,7 @@ public class ClasesEntity {
 	@Column(name = "ubicacion")
 	private String ubicacion;
 	
+	@Future(message = "La fecha de la clase no puede ser en el pasado")
 	@Column(name = "fecha_clase") 
 	private LocalDate fechaClase;
 
@@ -62,7 +64,7 @@ public class ClasesEntity {
 	 * CascadeType.ALL = Cuando eliminemos una gategoria, podremos eliminar tambien las clases asociadas
 	 * a esa categoria.
 	 */
-	@OneToMany(mappedBy = "clasesEnt", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clasesEnt", orphanRemoval = true)
 	@JsonIgnore
 	private Set<UsuarioClasesEntity> usuarioClases = new LinkedHashSet<>();
 	

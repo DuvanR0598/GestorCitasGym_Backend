@@ -25,16 +25,10 @@ public class UsuarioClasesEntity {
 	private Long usuarioClasesId;
 	
 	@JoinColumn(name = "cedula_usuarios")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private UsuarioEntity usuarioEnt;
 	
-	/**
-	 * FetchType.EAGER= Cuando consultemos una inscripcion, la inscripcion nos devolvera la clase relacionada.
-	 */
 	@JoinColumn(name = "id_clases")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private ClasesEntity clasesEnt;
-	
-	
-	
 }

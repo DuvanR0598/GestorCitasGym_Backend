@@ -112,7 +112,8 @@ public class ClasesServiceImpl implements IClasesService {
 
 	@Override
 	public String eliminarClase(Long idClase) {
-		if(clasesRepository.findById(idClase).isPresent()) {
+		Optional<ClasesEntity> clase = clasesRepository.findById(idClase);
+		if(clase.isPresent()) {
 			clasesRepository.deleteById(idClase);
 			return "¡Clase eliminada correctamente!";
 		}

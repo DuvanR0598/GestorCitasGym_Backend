@@ -10,4 +10,6 @@ import com.udea.energym.persistence.entity.UsuarioClasesEntity;
 public interface IUsuarioClaseRepository extends JpaRepository<UsuarioClasesEntity, Long> {
 
 	List<UsuarioClasesEntity> findByClasesEnt(ClasesEntity clase);
+	
+	void deleteByClasesEnt(ClasesEntity clasesEnt);
 }

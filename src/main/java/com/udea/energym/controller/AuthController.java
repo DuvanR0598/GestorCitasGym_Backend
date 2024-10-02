@@ -23,11 +23,14 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin("*") //permite el intercambio de recursos(solicitudes) entre Back y Front
@@ -79,7 +82,16 @@ public class AuthController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrarUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<?> registrarUsuario(@Valid @RequestBody Usuario usuario, BindingResult result){
+    	
+    	if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+    	
+    	if (Boolean.TRUE.equals(usuarioRepositorio.existsByEmail(usuario.getEmail()))) {
+            return new ResponseEntity<>("El correo electrónico ya está registrado", HttpStatus.BAD_REQUEST);
+        }
+    	
     	if(Boolean.TRUE.equals(usuarioRepositorio.existsByUsername(usuario.getUsername()))) {
 			return new ResponseEntity<>("El nombre de usuario ya existe", HttpStatus.BAD_REQUEST);
 		}else {
