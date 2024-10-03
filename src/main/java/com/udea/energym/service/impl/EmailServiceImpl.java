@@ -13,14 +13,13 @@ public class EmailServiceImpl implements IEmailService {
 	@Autowired
     private JavaMailSender mailSender;
 
+	//Enviar correo electrónico de bienvenida de cancelación o reprogramación
 	@Override
-	public void sendWelcomeEmail(String to, String subject, String text) {
+	public void enviarEmail(String destinatario, String asunto, String mensaje) {
 		SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
+        message.setTo(destinatario);
+        message.setSubject(asunto);
+        message.setText(mensaje);
         mailSender.send(message);
-		
 	}
-
 }

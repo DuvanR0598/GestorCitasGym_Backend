@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+//@EnableScheduling //las notificaciones de recordatorios se ejecuten periódicamente
 public class EnergymApplication {
 
 	public static void main(String[] args) {

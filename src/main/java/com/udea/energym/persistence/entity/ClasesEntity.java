@@ -64,7 +64,7 @@ public class ClasesEntity {
 	 * CascadeType.ALL = Cuando eliminemos una gategoria, podremos eliminar tambien las clases asociadas
 	 * a esa categoria.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clasesEnt", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "clasesEnt", orphanRemoval = true)
 	@JsonIgnore
 	private Set<UsuarioClasesEntity> usuarioClases = new LinkedHashSet<>();
 	

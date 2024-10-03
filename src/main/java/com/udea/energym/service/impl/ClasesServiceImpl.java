@@ -40,6 +40,9 @@ public class ClasesServiceImpl implements IClasesService {
 	
 	@Autowired
     private IUsuarioClaseRepository usuarioClaseRepository;
+	
+	@Autowired
+	private EmailServiceImpl emailServiceImpl;
 
 	@Override
 	public Set<Clases> obtenerClases() {
@@ -96,6 +99,9 @@ public class ClasesServiceImpl implements IClasesService {
 		Optional<ClasesEntity> claEntOpt = clasesRepository.findById(clases.getIdClases());
 		if(claEntOpt.isPresent()) {
 			ClasesEntity clasesEnt = claEntOpt.get();
+			boolean reprogramada = !clasesEnt.getFechaClase().equals(clases.getFechaClase()) || 
+                    !clasesEnt.getHora().equals(clases.getHora());
+			
 			clasesEnt.setNombreClase(clases.getNombreClase());
 			clasesEnt.setTipoClase(clases.getTipoClase());
 			clasesEnt.setInstructor(clases.getInstructor());
@@ -105,19 +111,45 @@ public class ClasesServiceImpl implements IClasesService {
 			clasesEnt.setCapacidadMax(clases.getCapacidadMax());
 			clasesEnt.setActivo(clases.isActivo());
 			clasesRepository.save(clasesEnt);
-			return "Clase actualizada...";
+			
+			// Notificar a los usuarios si la clase fue reprogramada
+	        if (reprogramada) {
+	            List<Usuario> usuariosInscritos = obtenerUsuariosInscritos(clases.getIdClases());
+	            for (Usuario usuario : usuariosInscritos) {
+	                String asunto = "Clase reprogramada en Energym";
+	                String mensaje = "Hola " + usuario.getNombre() + ",\n\n" +
+	                        "La clase de " + clasesEnt.getNombreClase() + " ha sido reprogramada. La nueva fecha y hora son: " +
+	                        clases.getFechaClase() + " a las " + clases.getHora() + ", con el instructor " + clases.getInstructor() + ".\n\n" +
+	                        "Disculpa las molestias.";
+	                
+	                emailServiceImpl.enviarEmail(usuario.getEmail(), asunto, mensaje);
+	            }
+	        }
+			return "La clase ha sido actualizada con exito";
 		}
-		return "La clase no existe...";
+		return "La clase no existe";
 	}
 
 	@Override
 	public String eliminarClase(Long idClase) {
 		Optional<ClasesEntity> clase = clasesRepository.findById(idClase);
 		if(clase.isPresent()) {
+			List<Usuario> usuariosInscritos = obtenerUsuariosInscritos(idClase);
 			clasesRepository.deleteById(idClase);
-			return "¡Clase eliminada correctamente!";
+			
+			// Notificar a los usuarios sobre la cancelación de la clase
+	        for (Usuario usuario : usuariosInscritos) {
+	            String asunto = "Clase cancelada en Energym";
+	            String mensaje = "Hola " + usuario.getNombre() + ",\n\n" +
+	                    "Lamentamos informarte que la clase de " + clase.get().getNombreClase() + 
+	                    " con el instructor " + clase.get().getInstructor() + " ha sido cancelada.\n\n" +
+	                    "Disculpa las molestias.";
+
+	            emailServiceImpl.enviarEmail(usuario.getEmail(), asunto, mensaje);
+	        }
+			return "La clase " + clase.get().getNombreClase() + " a sido eliminada con éxito.";
 		}
-		return "Error! la clase no existe";
+		return "Error, la clase no fue encontrada";
 	}
 	
 	@Override
@@ -235,7 +267,39 @@ public class ClasesServiceImpl implements IClasesService {
         usuario.setNombre(usuarioEnt.getNombre());
         usuario.setApellido(usuarioEnt.getApellido());
         usuario.setEmail(usuarioEnt.getEmail());
-        // Mapear otros campos según sea necesario
         return usuario;
     }
+	
+//	@Scheduled(fixedRate = 60000) // (1 * 60 * 1000 ms) Revisa cada minuto
+//	public void enviarRecordatoriosDeCitas() {
+//		LocalDate fechaActual = LocalDate.now();
+//	    LocalTime horaActual = LocalTime.now();
+//	    LocalTime horaLimite = horaActual.plusHours(1);
+//		
+//	    List<ClasesEntity> clasesProximas = clasesRepository.findClasesProximas(fechaActual, Time.valueOf(horaActual), Time.valueOf(horaLimite));
+//		
+//	    for (ClasesEntity clase : clasesProximas) {
+//	        //if (!clase.isRecordatorioEnviado()) {
+//	            List<Usuario> usuariosInscritos = obtenerUsuariosInscritos(clase.getIdClases());
+//	            
+//	            for (Usuario usuario : usuariosInscritos) {
+//	                try {
+//	                    String asunto = "Recordatorio: Clase próximamente en Energym";
+//	                    String mensaje = "Hola " + usuario.getNombre() + ",\n\n" +
+//	                            "Este es un recordatorio de tu clase programada para las " + clase.getHora() +
+//	                            " con el instructor " + clase.getInstructor() + " en la clase de " + clase.getNombreClase() + ".\n\n" +
+//	                            "¡Te esperamos!";
+//	                    
+//	                    emailServiceImpl.enviarEmail(usuario.getEmail(), asunto, mensaje);
+//	                    System.out.println("Correo enviado a: " + usuario.getEmail());
+//	                } catch (Exception e) {
+//	                    System.err.println("Error al enviar correo a: " + usuario.getEmail() + " - " + e.getMessage());
+//	                }
+//	            }
+//
+//	            //clase.setRecordatorioEnviado(true);  Marcar el recordatorio como enviado
+//	            //clasesRepository.save(clase);        Guardar el estado en la base de datos
+//	        //}
+//	    }
+//	}
 }

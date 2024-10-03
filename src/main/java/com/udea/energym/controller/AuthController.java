@@ -124,7 +124,7 @@ public class AuthController {
 	        usuarioMembresias.add(usuarioMembEnt);
 	        usuarioService.guardarUsuario(usuarioEnt, usuarioRoles, usuarioMembresias);
 	        
-	        emailService.sendWelcomeEmail(usuario.getEmail(), "Bienvenido a Energym " + usuario.getNombre(), "Gracias por registrarte en nuestro gimnasio!");
+	        emailService.enviarEmail(usuario.getEmail(), "Bienvenido a Energym, " + usuario.getNombre(), "Gracias por registrarse en nuestro gimnasio!");
 	        
 	        return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.OK);
 		}
