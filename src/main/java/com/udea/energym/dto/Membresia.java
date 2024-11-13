@@ -13,6 +13,5 @@ public class Membresia {
 	private String titulo;
 	private LocalDate fechaInicio;
 	private LocalDate fechaVencimiento;
-	private String estado; //activo, vencido, cancelado
-
+	private boolean activa; 
 }

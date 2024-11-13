@@ -107,7 +107,7 @@ public class AuthController {
 	        membresiaEnt.setTitulo(usuario.getListaMembresias().get(0).getTitulo());
 	        membresiaEnt.setFechaInicio(usuario.getListaMembresias().get(0).getFechaInicio());
 	        membresiaEnt.setFechaVencimiento(usuario.getListaMembresias().get(0).getFechaVencimiento());
-	        membresiaEnt.setEstado(usuario.getListaMembresias().get(0).getEstado());
+	        membresiaEnt.setActiva(usuario.getListaMembresias().get(0).isActiva());
 
 	        UsuarioEntity usuarioEnt = guardarUsuario(usuario);
 	        

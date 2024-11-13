@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.udea.energym.persistence.entity.MembresiaEntity;
 
+
 @Repository
 public interface IMembresiaRepository extends JpaRepository<MembresiaEntity, Long> {
 

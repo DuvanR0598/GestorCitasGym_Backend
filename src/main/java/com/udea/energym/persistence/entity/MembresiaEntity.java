@@ -37,8 +37,8 @@ public class MembresiaEntity {
 	@Column(name = "fecha_vencimiento")
 	private LocalDate fechaVencimiento;
 	
-	@Column(name = "estado")
-	private String estado; //activo, vencido, cancelado
+	@Column(name = "activa")
+	private boolean activa;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "membresia")
     private Set<UsuarioMembresiaEntity> usuarioMembresias = new HashSet<>();

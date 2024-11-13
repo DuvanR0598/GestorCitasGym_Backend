@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,6 +36,6 @@ public class CategoriaEntity {
 	private String descripcion;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "categoria")
-	//@JoinColumn(name = "clases")
+	@JsonIgnore // Ignorar la relación bidireccional al serializar
     private Set<ClasesEntity> clasesEntity = new HashSet<>();
 }

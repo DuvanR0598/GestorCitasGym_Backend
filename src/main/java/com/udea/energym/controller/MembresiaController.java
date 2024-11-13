@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,5 +24,10 @@ public class MembresiaController {
 	@PostMapping("/guardar-membresia")
 	public ResponseEntity<Membresia> guardarMembresia(@RequestBody Membresia membresia){
 		return ResponseEntity.ok().body(membresiaService.guardarMembresia(membresia));
+	}
+	
+	@PutMapping("/actualizar-membresia")
+	public ResponseEntity<String> actualizarMembresia(@RequestBody Membresia membresia) {
+		return ResponseEntity.ok().body(membresiaService.actualizarMembresia(membresia));
 	}
 }

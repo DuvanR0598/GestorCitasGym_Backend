@@ -1,5 +1,8 @@
 package com.udea.energym.persistence.entity;
 
+import java.time.LocalDate;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,10 +24,13 @@ public class UsuarioMembresiaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long usuarioMembresiaId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UsuarioEntity usuario;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private MembresiaEntity membresia;
+    
+    @Column(name = "fecha_asociacion")
+    private LocalDate fechaAsociacion;
 
 }

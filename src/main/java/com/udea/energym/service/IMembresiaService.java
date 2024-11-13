@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.udea.energym.dto.Membresia;
 import com.udea.energym.persistence.entity.MembresiaEntity;
+import com.udea.energym.persistence.entity.UsuarioEntity;
 
 public interface IMembresiaService {
 	
@@ -16,4 +17,6 @@ public interface IMembresiaService {
 	String actualizarMembresia(Membresia membresia);
 	
 	String eliminarMembresia(Long idMembresia);
+	
+	boolean verificarMembresiaActiva(UsuarioEntity usuarioEnt);
 }

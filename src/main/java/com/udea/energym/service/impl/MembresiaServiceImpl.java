@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.udea.energym.dto.Membresia;
 import com.udea.energym.persistence.entity.MembresiaEntity;
+import com.udea.energym.persistence.entity.UsuarioEntity;
 import com.udea.energym.persistence.repository.IMembresiaRepository;
+import com.udea.energym.persistence.repository.IUsuarioMembresiaRepository;
 import com.udea.energym.service.IMembresiaService;
 
 @Service
@@ -17,6 +19,9 @@ public class MembresiaServiceImpl implements IMembresiaService {
 	
 	@Autowired
 	private IMembresiaRepository membresiaRepository;
+	
+	@Autowired
+    private IUsuarioMembresiaRepository usuarioMembresiaRepository;
 
 	@Override
 	public Set<MembresiaEntity> obtenerMembresias() {
@@ -48,10 +53,12 @@ public class MembresiaServiceImpl implements IMembresiaService {
 		Optional<MembresiaEntity> membresiaOptEnt = membresiaRepository.findById(membresia.getIdMembresia());
 		if(membresiaOptEnt.isPresent()) {
 			MembresiaEntity membresiaEnt = membresiaOptEnt.get();
+			
 			membresiaEnt.setTitulo(membresia.getTitulo());
 			membresiaEnt.setFechaInicio(membresia.getFechaInicio());
 			membresiaEnt.setFechaVencimiento(membresia.getFechaVencimiento());
-			membresiaEnt.setEstado(membresia.getEstado());
+			membresiaEnt.setActiva(membresia.isActiva());
+			membresiaRepository.save(membresiaEnt);
 			return "Membresia actualizada";
 		}
 		return "La membresia no existe...";
@@ -66,13 +73,18 @@ public class MembresiaServiceImpl implements IMembresiaService {
 		return "Error! la membresia no existe";
 	}
 	
+	@Override
+	public boolean verificarMembresiaActiva(UsuarioEntity usuarioEnt) {
+		return usuarioMembresiaRepository.findByUsuarioAndMembresia_ActivaTrue(usuarioEnt).isPresent();
+	}
+	
 	private MembresiaEntity dtoToEntity (Membresia membresia) {
 		MembresiaEntity membresiaEnt = new MembresiaEntity();
 		
 		membresiaEnt.setTitulo(membresia.getTitulo());
 		membresiaEnt.setFechaInicio(membresia.getFechaInicio());
 		membresiaEnt.setFechaVencimiento(membresia.getFechaVencimiento());
-		membresiaEnt.setEstado(membresia.getEstado());	
+		membresiaEnt.setActiva(membresia.isActiva());	
 		return membresiaEnt;
 	}
 
@@ -81,7 +93,9 @@ public class MembresiaServiceImpl implements IMembresiaService {
 		membresia.setTitulo(membresiaEnt.getTitulo());
 		membresia.setFechaInicio(membresiaEnt.getFechaInicio());
 		membresia.setFechaVencimiento(membresiaEnt.getFechaVencimiento());
-		membresia.setEstado(membresiaEnt.getEstado());
+		membresia.setActiva(membresiaEnt.isActiva());
 		return membresia;
 	}
+
+	
 }
