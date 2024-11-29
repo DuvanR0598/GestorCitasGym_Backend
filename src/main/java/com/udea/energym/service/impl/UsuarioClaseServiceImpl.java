@@ -19,6 +19,7 @@ import com.udea.energym.persistence.entity.UsuarioClasesEntity;
 import com.udea.energym.persistence.entity.UsuarioEntity;
 import com.udea.energym.persistence.repository.IClasesRepository;
 import com.udea.energym.persistence.repository.IUsuarioClaseRepository;
+import com.udea.energym.persistence.repository.IUsuarioMembresiaRepository;
 import com.udea.energym.persistence.repository.IUsuarioRepository;
 import com.udea.energym.service.IUsuarioClaseService;
 
@@ -35,7 +36,10 @@ public class UsuarioClaseServiceImpl implements IUsuarioClaseService {
     private IUsuarioClaseRepository usuarioClaseRepository;
 	
 	@Autowired
-	private MembresiaServiceImpl membresiaService;
+	private IUsuarioMembresiaRepository usuarioMembresiaRepository;
+	
+//	@Autowired
+//	private MembresiaServiceImpl membresiaService;
 
 	@Override
 	public void inscribirUsuarioClase(Long idClase, Long cedulaUsuario) {
@@ -52,18 +56,17 @@ public class UsuarioClaseServiceImpl implements IUsuarioClaseService {
             throw new SecurityException("El usuario no corresponde con el logueado en el sistema");
         }
         
-        
-        
+     // Verificar que el usuario tenga una membresía activa
+//        boolean membresiaActiva = membresiaService.verificarMembresiaActiva(usuarioEnt);
+//        if (!membresiaActiva) {
+//            throw new IllegalStateException("La membresía debe estar activa para inscribirse en la clase.");
+//        }
         
      // Verificar que el usuario tenga una membresía activa
-        boolean membresiaActiva = membresiaService.verificarMembresiaActiva(usuarioEnt);
-        if (!membresiaActiva) {
-            throw new IllegalStateException("La membresía debe estar activa para inscribirse en la clase.");
+        boolean tieneMembresiaActiva = usuarioMembresiaRepository.existsByUsuarioCedulaAndActivoTrue(cedulaUsuario);
+        if (!tieneMembresiaActiva) {
+            throw new IllegalStateException("El usuario no tiene una membresía activa para inscribirse en clases.");
         }
-        
-        
-        
-        
         
         // Buscar la clase por id
 		ClasesEntity clase = clasesRepository.findById(idClase)

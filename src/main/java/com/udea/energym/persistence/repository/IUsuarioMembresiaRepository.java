@@ -12,5 +12,7 @@ import com.udea.energym.persistence.entity.UsuarioMembresiaEntity;
 public interface IUsuarioMembresiaRepository extends JpaRepository<UsuarioMembresiaEntity, Long> {
 	
 	Optional<UsuarioMembresiaEntity> findByUsuarioAndMembresia_ActivaTrue(UsuarioEntity usuario);
+	
+	boolean existsByUsuarioCedulaAndActivoTrue(Long cedulaUsuario);
 
 }

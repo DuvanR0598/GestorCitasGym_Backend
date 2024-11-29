@@ -31,7 +31,7 @@ public class Usuario {
 	private List<Rol> listaRoles;
 	private List<Membresia> listaMembresias;
 	
-	@AssertTrue(message = "El usuario debe tener entre 12 y 95 años.")
+	@AssertTrue(message = "El usuario debe tener entre 12 y 70 años.")
     public boolean isEdadValida() {
         if (this.fechaNacimiento == null) {
             return false;

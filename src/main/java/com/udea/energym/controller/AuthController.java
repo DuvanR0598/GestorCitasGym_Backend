@@ -27,6 +27,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -118,7 +119,8 @@ public class AuthController {
 	        UsuarioMembresiaEntity usuarioMembEnt = new UsuarioMembresiaEntity();
 	        usuarioMembEnt.setUsuario(usuarioEnt);
 	        usuarioMembEnt.setMembresia(membresiaEnt);
-	        
+	        usuarioMembEnt.setFechaAsociacion(LocalDate.now());
+	        usuarioMembEnt.setActivo(true);
 
 	        usuarioRoles.add(usuarioRolEnt);
 	        usuarioMembresias.add(usuarioMembEnt);

@@ -32,5 +32,8 @@ public class UsuarioMembresiaEntity {
     
     @Column(name = "fecha_asociacion")
     private LocalDate fechaAsociacion;
+    
+    @Column(name = "activo")
+    private boolean activo;
 
 }
